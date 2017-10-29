@@ -1,4 +1,4 @@
-body {
+body, g {
   font-family: 'Open Sans', sans-serif;
 }
 
@@ -11,5 +11,5 @@ g.axis {
 }
 
 g rect:hover {
-  fill: black;
+  opacity: 0.6;
 }
