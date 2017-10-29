@@ -5,7 +5,6 @@ var margin = {
   left: 40
 }
 
-// TODO :refactor, change color, add tooltip
 
 var svg = d3.select("#bar-chart"),
     width = +svg.attr("width") - margin.left - margin.right,
@@ -23,7 +22,8 @@ var y = d3.scaleLinear()
     .rangeRound([height, 0]);
 
 var z = d3.scaleOrdinal()
-    .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+    // colors in asecnding age group
+    .range(["#e5e5b7", "#c7e9b4", "#7fcdbb", "#41b6c4", "#1d91c0", "#225ea8", "#0c2c84"]);
 
 d3.csv("data/online-shoppers-by-age-group.csv", function(d, i, columns) {
   for (var i = 1, n = columns.length; i < n; ++i) d[columns[i]] = +d[columns[i]];
@@ -31,11 +31,15 @@ d3.csv("data/online-shoppers-by-age-group.csv", function(d, i, columns) {
 }, function(error, data) {
   if (error) throw error;
 
-  var keys = data.columns.slice(1);
+  var ageGroups = data.columns.slice(1);
 
   x0.domain(data.map(function(d) { return d.year; }));
-  x1.domain(keys).rangeRound([0, x0.bandwidth()]);
-  y.domain([0, d3.max(data, function(d) { return d3.max(keys, function(key) { return d[key]; }); })]).nice();
+  x1.domain(ageGroups).rangeRound([0, x0.bandwidth()]);
+  y.domain([0, d3.max(data, function(d) {
+    return d3.max(ageGroups, function(key) {
+      return d[key]; }
+    ); })
+  ]).nice();
 
   g.append("g")
     .selectAll("g")
@@ -43,7 +47,7 @@ d3.csv("data/online-shoppers-by-age-group.csv", function(d, i, columns) {
     .enter().append("g")
       .attr("transform", function(d) { return "translate(" + x0(d.year) + ",0)"; })
     .selectAll("rect")
-    .data(function(d) { return keys.map(function(key) { return {key: key, value: d[key]}; }); })
+    .data(function(d) { return ageGroups.map(function(key) { return {key: key, value: d[key]}; }); })
     .enter().append("rect")
       .attr("x", function(d) { return x1(d.key); })
       .attr("y", function(d) { return y(d.value); })
@@ -60,31 +64,31 @@ d3.csv("data/online-shoppers-by-age-group.csv", function(d, i, columns) {
       .attr("class", "axis")
       .call(d3.axisLeft(y).ticks(null, "s"))
     .append("text")
-      .attr("x", 2)
-      .attr("y", y(y.ticks().pop()) + 0.5)
+      .attr("x", 10)
+      .attr("y", y(y.ticks().pop()) - 13)
       .attr("dy", "0.32em")
       .attr("fill", "#000")
       .attr("font-weight", "bold")
-      .attr("text-anchor", "start")
+      .attr("text-anchor", "middle")
       .text("Percentage (%)");
 
   var legend = g.append("g")
       .attr("font-family", "sans-serif")
-      .attr("font-size", 10)
+      .attr("font-size", 12)
       .attr("text-anchor", "end")
-    .selectAll("g")
-    .data(keys.slice().reverse())
-    .enter().append("g")
+      .selectAll("g")
+      .data(ageGroups.slice().reverse())
+      .enter().append("g")
       .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
 
   legend.append("rect")
-      .attr("x", width - 30)
+      .attr("x", width - 26)
       .attr("width", 19)
       .attr("height", 19)
       .attr("fill", z);
 
   legend.append("text")
-      .attr("x", width - 35)
+      .attr("x", width - 32)
       .attr("y", 9.5)
       .attr("dy", "0.32em")
       .text(function(d) { return d; });

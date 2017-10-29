@@ -5,3 +5,11 @@ body {
 .axis .domain {
   display: none;
 }
+
+g.axis {
+  font-size: 14px;
+}
+
+g rect:hover {
+  fill: black;
+}
