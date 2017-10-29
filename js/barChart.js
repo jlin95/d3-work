@@ -5,7 +5,6 @@ var margin = {
   left: 40
 }
 
-
 var svg = d3.select("#bar-chart"),
     width = +svg.attr("width") - margin.left - margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
@@ -53,7 +52,20 @@ d3.csv("data/online-shoppers-by-age-group.csv", function(d, i, columns) {
       .attr("y", function(d) { return y(d.value); })
       .attr("width", x1.bandwidth())
       .attr("height", function(d) { return height - y(d.value); })
-      .attr("fill", function(d) { return z(d.key); });
+      .attr("fill", function(d) { return z(d.key); })
+      .on("mouseover", function() {
+        return tooltip.style("display", null);
+      })
+      .on("mouseout", function() {
+        return tooltip.style("display", "none");
+      })
+      .on("mousemove", function(d) {
+        return tooltip.style("top", (d3.event.pageY - 75) + "px")
+                      .style("left", (d3.event.pageX - 16) + "px")
+                      .style("border", "solid 2px")
+                      .style("border-color", d3.select(this).style("fill"))
+                      .select("text").text("Ages " + "\n" + d.key + " = " + d.value + "%");
+      });
 
   g.append("g")
       .attr("class", "axis")
@@ -73,8 +85,7 @@ d3.csv("data/online-shoppers-by-age-group.csv", function(d, i, columns) {
       .text("Percentage (%)");
 
   var legend = g.append("g")
-      .attr("font-family", "sans-serif")
-      .attr("font-size", 12)
+      .attr("font-size", 12.5)
       .attr("text-anchor", "end")
       .selectAll("g")
       .data(ageGroups.slice().reverse())
@@ -93,3 +104,21 @@ d3.csv("data/online-shoppers-by-age-group.csv", function(d, i, columns) {
       .attr("dy", "0.32em")
       .text(function(d) { return d; });
 });
+
+var tooltip = d3.select("body")
+  .append("div")
+  .style("position", "absolute")
+  .style("border-radius", "8px")
+  .style("font-size", "12px")
+  .style("background-color", "white")
+  .style("padding", "5px");
+
+
+tooltip.append("rect")
+  .attr("width", 80)
+  .attr("height", 20)
+  .style("opacity", 1);
+
+tooltip.append("text")
+  .attr("x", 30)
+  .attr("dy", "1.2em");
