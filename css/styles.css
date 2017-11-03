@@ -10,6 +10,7 @@ g.axis {
   font-size: 14px;
 }
 
+
 g rect:hover {
   opacity: 0.6;
 }

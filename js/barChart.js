@@ -1,31 +1,31 @@
-var margin = {
+let margin = {
   top: 20,
   right: 85,
   bottom: 30,
   left: 40
 }
 
-var svg = d3.select("#bar-chart"),
+let svg = d3.select("#bar-chart"),
     width = +svg.attr("width") - margin.left - margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
     g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-var x0 = d3.scaleBand()
+let x0 = d3.scaleBand()
     .rangeRound([0, width])
     .paddingInner(0.1);
 
-var x1 = d3.scaleBand()
+let x1 = d3.scaleBand()
     .padding(0.05);
 
-var y = d3.scaleLinear()
+let y = d3.scaleLinear()
     .rangeRound([height, 0]);
 
-var z = d3.scaleOrdinal()
+let z = d3.scaleOrdinal()
     // colors in asecnding age group
     .range(["#e5e5b7", "#c7e9b4", "#7fcdbb", "#41b6c4", "#1d91c0", "#225ea8", "#0c2c84"]);
 
 d3.csv("data/online-shoppers-by-age-group.csv", function(d, i, columns) {
-  for (var i = 1, n = columns.length; i < n; ++i) d[columns[i]] = +d[columns[i]];
+  for (let i = 1, n = columns.length; i < n; ++i) d[columns[i]] = +d[columns[i]];
   return d;
 }, function(error, data) {
   if (error) throw error;
@@ -84,7 +84,7 @@ d3.csv("data/online-shoppers-by-age-group.csv", function(d, i, columns) {
       .attr("text-anchor", "middle")
       .text("Percentage (%)");
 
-  var legend = g.append("g")
+  let legend = g.append("g")
       .attr("font-size", 12.5)
       .attr("text-anchor", "end")
       .selectAll("g")
@@ -105,7 +105,7 @@ d3.csv("data/online-shoppers-by-age-group.csv", function(d, i, columns) {
       .text(function(d) { return d; });
 });
 
-var tooltip = d3.select("body")
+let tooltip = d3.select("body")
   .append("div")
   .style("position", "absolute")
   .style("border-radius", "8px")
