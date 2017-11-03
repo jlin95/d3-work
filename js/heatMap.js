@@ -81,7 +81,7 @@ d3.json("data/git-commit-frequency.json", function(data) {
           .select("text").text("Week " + d.week);
   });
 
-  // describces cell properties for individual value in the week
+  // describes cell properties for individual value in the week
   let cell = rows.selectAll("rect")
   	.data(function(d, i) {
       return d.days; // this returns every day array (of length 7 values)
