@@ -93,13 +93,13 @@ d3.csv("data/online-shoppers-by-age-group.csv", function(d, i, columns) {
       .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
 
   legend.append("rect")
-      .attr("x", width - 26)
+      .attr("x", width + 69)
       .attr("width", 19)
       .attr("height", 19)
       .attr("fill", z);
 
   legend.append("text")
-      .attr("x", width - 32)
+      .attr("x", width + 63)
       .attr("y", 9.5)
       .attr("dy", "0.32em")
       .text(function(d) { return d; });

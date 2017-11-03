@@ -1,14 +1,42 @@
-var margin = {
-  top: 20,
-  right: 85,
-  bottom: 30,
-  left: 40
-}
+d3.json("data/git-commit-frequency.json", function(data) {
+  let width = (20 + 1) * data.length;
+  let height = (20 + 1) * 7;
+  let colors = [ "#1a9850", "#66bd63", "#a6d96a", "#d9ef8b", "#ffffbf", "#fee08b", "#fdae61","#f46d43", "#d73027"];
 
-var gridSize = 30;
+  var x = d3.scaleLinear()
+    .domain([0, data.length])
+    .range([0, width]);
 
-var svg = d3.select("#chart").append("svg")
-  .attr("width", width + margin.left + margin.right)
-  .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  var y = d3.scaleLinear()
+    .domain([0, 7])
+    .rangeRound([height, 0]);
+
+  var svg = d3.select("#heat-map")
+    .attr("width", width)
+    .attr("height", height),
+    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  var rows = svg.selectAll('.row')
+    .data(data)
+    .enter()
+    .append('g')
+    .attr("transform", function(d, i){
+    	return "translate(" + x(i) + ", -20" + ")"
+  })
+
+  var box = rows.selectAll("rect")
+  	.data(function(d, i){
+      console.log(d.days);
+      return d.days;
+    })
+  	.enter()
+  	.append("rect")
+		.attr("y", function(d, i) {
+      return y(i);
+    })
+    .attr("width", 20)
+    .attr("height", 20)
+    .style("fill", 'green')
+    .attr("class", "bordered");
+
+});
