@@ -66,8 +66,20 @@ d3.json("data/git-commit-frequency.json", function(data) {
     .enter()
     .append('g')
     .attr("transform", function(d, i){
-    	return "translate(" + x(i) + ", -20" + ")"
+    	return "translate(" + x(i) + ", -20" + ")";
   })
+  .on("mouseover", function() {
+    return tip.style("display", null);
+  })
+  .on("mouseout", function() {
+    return tip.style("display", "none");
+  })
+  .on("mousemove", function(d) {
+    return tip.style("top", (d3.event.pageY - 50) + "px")
+          .style("left", (d3.event.pageX - 40) + "px")
+          .style("border", "solid 2px")
+          .select("text").text("Week " + d.week);
+  });
 
   // describces cell properties for individual value in the week
   let cell = rows.selectAll("rect")
@@ -77,7 +89,7 @@ d3.json("data/git-commit-frequency.json", function(data) {
   	.enter()
   	.append("rect")
 		.attr("y", function(d, i) {
-      return y(i);
+      return x(i) + 21.5;
     })
     .attr("width", 20)
     .attr("height", 20)
@@ -112,3 +124,20 @@ d3.json("data/git-commit-frequency.json", function(data) {
     .attr("class", "bordered");
 
 });
+
+var tip = d3.select("body")
+  .append("div")
+  .style("position", "absolute")
+  .style("border-radius", "8px")
+  .style("font-size", "12px")
+  .style("background-color", "white")
+  .style("padding", "5px");
+
+tip.append("rect")
+  .attr("width", 80)
+  .attr("height", 20)
+  .style("opacity", 1);
+
+tip.append("text")
+  .attr("x", 30)
+  .attr("dy", "1.2em");
